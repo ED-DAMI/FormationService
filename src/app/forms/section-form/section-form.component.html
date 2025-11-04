@@ -1,0 +1,72 @@
+<!-- src/app/forms/section-form/section-form.component.html -->
+
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-white border-bottom p-3">
+    <h5 class="mb-0 text-secondary">
+      <i class="bi bi-file-text me-2"></i>
+      Édition du Contenu de la Section
+    </h5>
+  </div>
+  <div class="card-body p-4">
+
+    <!-- Champ : Titre de la Section -->
+    <div class="mb-4">
+      <label for="sectionTitre" class="form-label fw-bold">Titre de la Section :</label>
+      <input type="text" id="sectionTitre" class="form-control form-control-lg"
+             [(ngModel)]="section.titre"
+             (ngModelChange)="onModelChange()"
+             name="sectionTitre"
+             placeholder="Ex: Introduction au concept de Signal">
+    </div>
+
+    <!-- Sélecteur de Type de Contenu (UX moderne) -->
+    <div class="mb-4">
+      <label class="form-label fw-bold d-block">Type de Contenu :</label>
+      <div class="btn-group btn-group-sm" role="group">
+
+        <input type="radio" class="btn-check" id="typeTexte" value="TEXTE"
+               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
+        <label class="btn btn-outline-secondary" for="typeTexte"><i class="bi bi-textarea me-2"></i> Texte (Éditeur Riche)</label>
+
+        <input type="radio" class="btn-check" id="typeVideo" value="VIDEO"
+               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
+        <label class="btn btn-outline-secondary" for="typeVideo"><i class="bi bi-camera-video me-2"></i> Vidéo (URL)</label>
+
+        <input type="radio" class="btn-check" id="typeImage" value="IMAGE"
+               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
+        <label class="btn btn-outline-secondary" for="typeImage"><i class="bi bi-image me-2"></i> Image (URL)</label>
+      </div>
+    </div>
+
+    <!-- Zone de Contenu Conditionnelle -->
+    <div class="mb-3">
+      <label for="sectionContenu" class="form-label fw-bold">
+        Contenu ({{ section.typeContenu }}) :
+      </label>
+
+      @if (section.typeContenu === 'TEXTE') {
+        <!-- ZONE CRUCIALE : PLACEHOLDER DE L'ÉDITEUR RICHE WYSIWYG -->
+        <textarea id="sectionContenu" class="form-control editor-rich-placeholder" rows="10"
+                  placeholder="Intégrez ici votre composant d'éditeur riche (Quill, Tiptap, CKEditor) pour le formatage du texte."
+                  [(ngModel)]="section.contenu"
+                  (ngModelChange)="onModelChange()"
+                  name="sectionContenu"></textarea>
+      } @else {
+        <!-- Champ URL pour Vidéo ou Image -->
+        <input type="url" id="sectionContenu" class="form-control form-control-lg"
+               placeholder="Collez l'URL de votre {{ section.typeContenu === 'VIDEO' ? 'vidéo YouTube/Vimeo' : 'image' }} ici."
+               [(ngModel)]="section.contenu"
+               (ngModelChange)="onModelChange()"
+               name="sectionContenu">
+      }
+
+      <!-- UX: Prévisualisation de l'URL pour les médias -->
+      @if (section.typeContenu !== 'TEXTE' && section.contenu) {
+        <div class="mt-3 p-3 bg-light rounded text-break">
+          <small class="text-muted">URL source : {{ section.contenu }}</small>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

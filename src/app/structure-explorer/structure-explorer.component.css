@@ -1,0 +1,62 @@
+/* src/app/structure-explorer/structure-explorer.component.css */
+
+.explorer-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.15s, color 0.15s;
+  position: relative;
+}
+
+/* Effet de survol */
+.explorer-item:hover {
+  background-color: #e9ecef; /* bg-light (Hover gris subtil) */
+}
+
+/* Style de l'élément sélectionné */
+.selected-item {
+  background-color: #cce5ff; /* bg-primary-subtle (Bleu clair pour la sélection) */
+  color: #004085 !important; /* Texte bleu foncé */
+  font-weight: 500;
+}
+
+/* Cache les actions par défaut */
+.item-actions {
+  display: none;
+  margin-left: auto;
+  gap: 5px;
+  z-index: 10;
+}
+
+/* Affiche les actions au survol du parent */
+.explorer-item:hover .item-actions {
+  display: flex;
+}
+
+/* Style des boutons d'action */
+.item-actions button {
+  border: none;
+  background: none;
+  padding: 0 4px;
+  color: #6c757d; /* Gris pour les icônes d'action */
+  font-size: 0.9rem;
+  transition: color 0.1s;
+}
+
+.item-actions button:hover {
+  color: #0d6efd; /* Bleu pour l'interactivité */
+}
+
+/* Styles pour les lignes d'arborescence (indentation) */
+
+.border-start {
+  border-left: 1px solid #dee2e6 !important; /* Ligne Bootstrap par défaut */
+}
+
+.ms-2 { margin-left: 0.5rem !important; }
+.ms-3 { margin-left: 1rem !important; }
+.ps-2 { padding-left: 0.5rem !important; }
+.ps-3 { padding-left: 1rem !important; }

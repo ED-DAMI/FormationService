@@ -1,0 +1,91 @@
+<!-- src/app/structure-explorer/structure-explorer.component.html -->
+
+<!-- 1. Affichage de la Formation (Racine) -->
+<div class="explorer-item mb-2"
+     [class.selected-item]="isEqual(formation, currentSelectedItem)"
+     (click)="onSelect(formation)">
+  <i class="bi bi-mortarboard-fill me-2 text-success"></i>
+  <span class="text-truncate fw-bold">{{ formation.titre }}</span>
+
+  <div class="item-actions">
+    <!-- Ajout d'un Cours -->
+    <button title="Ajouter un Cours" (click)="$event.stopPropagation(); onAddItem(formation)">
+      <i class="bi bi-plus-circle-fill"></i>
+    </button>
+  </div>
+</div>
+
+<!-- 2. Liste des Cours -->
+@for (cours of formation.cours; track cours.id) {
+  <div class="ms-2 border-start ps-3"> <!-- Indentation pour les Cours -->
+
+    <!-- Élément Cours -->
+    <div class="explorer-item"
+         [class.selected-item]="isEqual(cours, currentSelectedItem)"
+         (click)="onSelect(cours)">
+      <i class="bi bi-journal-bookmark-fill me-2 text-primary"></i>
+      <span class="text-truncate">{{ cours.titre }}</span>
+
+      <div class="item-actions">
+        <!-- Ajout d'un Chapitre -->
+        <button title="Ajouter un Chapitre" (click)="$event.stopPropagation(); onAddItem(cours)">
+          <i class="bi bi-plus-circle-fill"></i>
+        </button>
+        <!-- Suppression du Cours -->
+        <button class="text-danger" title="Supprimer ce Cours" (click)="$event.stopPropagation(); onRemoveItem(cours)">
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. Liste des Chapitres du Cours -->
+    @if (cours.chapitres && cours.chapitres.length > 0) {
+      <div class="ms-3 border-start ps-3"> <!-- Indentation supplémentaire -->
+        @for (chapitre of cours.chapitres; track chapitre.id) {
+
+          <!-- Élément Chapitre -->
+          <div class="explorer-item"
+               [class.selected-item]="isEqual(chapitre, currentSelectedItem)"
+               (click)="onSelect(chapitre)">
+            <i class="bi bi-book me-2 text-dark"></i>
+            <span class="text-truncate">{{ chapitre.titre }}</span>
+
+            <div class="item-actions">
+              <!-- Ajout d'une Section -->
+              <button title="Ajouter une Section" (click)="$event.stopPropagation(); onAddItem(chapitre)">
+                <i class="bi bi-plus-circle-fill"></i>
+              </button>
+              <!-- Suppression du Chapitre -->
+              <button class="text-danger" title="Supprimer ce Chapitre" (click)="$event.stopPropagation(); onRemoveItem(chapitre)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Liste des Sections du Chapitre -->
+          @if (chapitre.sections && chapitre.sections.length > 0) {
+            <div class="ms-3 ps-3"> <!-- Indentation simple -->
+              @for (section of chapitre.sections; track section.id) {
+
+                <!-- Élément Section -->
+                <div class="explorer-item"
+                     [class.selected-item]="isEqual(section, currentSelectedItem)"
+                     (click)="onSelect(section)">
+                  <i class="bi bi-file-text me-2 text-secondary"></i>
+                  <span class="text-truncate">{{ section.titre || '(Section sans titre)' }}</span>
+
+                  <div class="item-actions">
+                    <!-- Suppression de la Section -->
+                    <button class="text-danger" title="Supprimer cette Section" (click)="$event.stopPropagation(); onRemoveItem(section)">
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+}
