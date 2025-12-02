@@ -13,19 +13,15 @@ import { Formation, Cours, Chapitre, Section } from '../interfaces/formation';
 export class FormationViewComponent {
   // Signal pour la formation
   protected formationSignal = signal<Formation | null>(null);
-
   openChapters = signal<Record<number, boolean>>({});
-
   @Input()
   set formation(value: Formation|null|undefined) {
     if(value){
       this.formationSignal.set(value);
-      // initialiser tous les chapitres fermés
       const state: Record<number, boolean> = {};
       value.cours?.forEach(c => c.chapitres?.forEach(ch => { if (ch.id) state[ch.id] = false; }));
       this.openChapters.set(state);
     }
-
   }
 
   // CORRECTION: Rendre la formation accessible dans le template via un nom unique (par exemple, formationComputed)
@@ -47,6 +43,11 @@ export class FormationViewComponent {
     if (!date) {
       return 'N/A';
     }
-    return "N/A"
+    // CORRECTION : On retourne la date formatée, pas "N/A"
+    return new Date(date).toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 }

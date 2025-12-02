@@ -54,9 +54,9 @@ export class FormationEditorComponent implements OnInit {
 
   // MÉTHODE CLÉ : Met à jour l'élément sélectionné et force le rafraîchissement du signal formation.
   onUpdateSelectedItem(updatedItem: ContentItem): void {
+
     this.cdr.detectChanges();
     this.selectedItem.set(updatedItem);
-    // CRUCIAL : Crée une nouvelle référence pour le signal 'formation' pour forcer le rafraîchissement de l'UI
     this.formation.update(f => ({ ...f }));
   }
 

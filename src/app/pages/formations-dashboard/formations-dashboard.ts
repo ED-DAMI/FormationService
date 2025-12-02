@@ -4,11 +4,7 @@ import { Router } from '@angular/router';
 import { FormationService } from '../../services/formation.service';
 import { Formation } from '../../interfaces/formation';
 import {FormationSelectionStateService} from '../../services/formation-selection-state-service';
-// Import du composant enfant
 import {FormationViewComponent} from '../../formation-view/formation-view';
-// Correction: Suppression de ChangeDetection et FormationView qui ne sont pas utilisés ou incorrects
-// import {ChangeDetection} from '@angular/cli/lib/config/workspace-schema';
-// import {FormationView} from '../../formation-view/formation-view'; // incorrect
 
 @Component({
   selector: 'app-formations-dashboard',
@@ -21,7 +17,8 @@ export class FormationsDashboardComponent implements OnInit {
 
   formations: Formation[] = [];
   loading = true;
-  // NOTE: Suppression de la dépendance à ChangeDetectorRef si elle n'est pas utilisée
+  selectedFormation: Formation | null = null;
+  showFormationView = false;
 
   constructor(
     private fs: FormationService,
@@ -70,10 +67,8 @@ export class FormationsDashboardComponent implements OnInit {
   }
 
 
-  selectedFormation: Formation | null = null;
-  showFormationView = false;
-
   viewFormation(f: Formation) {
+    console.log(f.titre)
     this.selectedFormation=f;
     this.showFormationView = true;
   }

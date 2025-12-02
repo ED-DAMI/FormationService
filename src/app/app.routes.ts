@@ -10,5 +10,8 @@ export const routes: Routes = [
   {
     path:"formation-dashboard"
     ,component:FormationsDashboardComponent
+  },{
+    path: "",redirectTo:'formation-dashboard',pathMatch:'full'
   }
+
 ];
