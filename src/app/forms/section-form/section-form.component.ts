@@ -1,8 +1,10 @@
 // src/app/forms/section-form/section-form.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, inject, signal, SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Section } from '../../interfaces/formation'; // Assurez-vous que le chemin est correct
+import { Section } from '../../interfaces/formation';
+import {FormationService} from '../../services/formation.service';
+ // Assurez-vous que le chemin est correct
 
 @Component({
   selector: 'app-section-form',
@@ -13,21 +15,52 @@ import { Section } from '../../interfaces/formation'; // Assurez-vous que le che
   styleUrl: './section-form.component.css',
 })
 export class SectionFormComponent {
-  /**
-   * @Input pour recevoir l'objet Section à éditer.
-   */
+
   @Input({ required: true }) section!: Section;
 
-  /**
-   * @Output pour émettre l'objet modifié vers le composant parent.
-   * Nommé 'sectionChange' pour supporter le [(section)] (liaison bidirectionnelle).
-   */
   @Output() sectionChange = new EventEmitter<Section>();
+  filePreview = signal<string | null>(null);
+  typeContenuOptions: Section['typeContenu'][] = ['TEXTE', 'IMAGE', 'VIDEO'];
 
-  /**
-   * Méthode appelée par (ngModelChange) pour émettre la modification au parent.
-   */
-  onModelChange(): void {
-    this.sectionChange.emit(this.section);
+
+
+  private formationService = inject(FormationService);
+
+  isUploading = signal(false);
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['section']) {
+      this.filePreview.set(null);
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input?.files[0]) {
+      const file = input?.files[0];
+
+      this.isUploading.set(true); // Début de l'upload
+      this.filePreview.set(null); // Réinitialise l'ancien aperçu
+
+      // 4. Appelez le service d'upload
+      this.formationService.uploadFile(file).subscribe({
+        next: (response) => {
+
+          // 5. Mettez à jour la propriété 'contenu' avec l'URL retournée par le backend
+          this.section.contenu = response.fileUrl;
+          this.filePreview.set(response.fileUrl); // Affiche le nouvel aperçu depuis l'URL
+          this.isUploading.set(false); // Fin de l'upload
+        },
+        error: (err) => {
+          console.error('Erreur d\'upload:', err);
+          alert(`Erreur lors de l'upload : ${err.error?.error || err.message}`);
+          this.isUploading.set(false); // Fin de l'upload (en erreur)
+        }
+      });
+    }
+ }
+  onTypeContenuChange(): void {
+    this.filePreview.set(null);
+    this.section.contenu = '';
   }
 }

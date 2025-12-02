@@ -1,0 +1,38 @@
+.formation-container {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #fff;
+}
+
+.formation-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.cours-container {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid #ccc;
+}
+
+.chapitre-container {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px dashed #aaa;
+}
+
+.section-item {
+  margin-left: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.section-image {
+  max-width: 200px;
+  display: block;
+  margin-top: 0.3rem;
+}

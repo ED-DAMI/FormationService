@@ -35,22 +35,41 @@
                placeholder="Ex: Débutant, Intermédiaire, Expert">
       </div>
 
-      <!-- Champ : URL Image de couverture -->
+      <!-- Champ : Image Upload -->
       <div class="col-md-6">
-        <label for="formationImage" class="form-label fw-bold">URL Image de couverture :</label>
-        <input type="url" id="formationImage" class="form-control"
-               [(ngModel)]="formation.image"
-               (ngModelChange)="onModelChange()"
-               name="formationImage"
-               placeholder="Collez l'URL d'une image">
+        <label class="form-label fw-bold">Image de couverture :</label>
 
-        <!-- UX: Prévisualisation de l'image -->
-        @if (formation.image) {
-          <div class="image-preview-container mt-2">
-            <img [src]="formation.image" alt="Aperçu de la couverture" class="image-preview">
+        <!-- Sélection du fichier -->
+        <input type="file"
+               class="form-control"
+               accept="image/*"
+               (change)="onImageSelected($event)"
+               [disabled]="isUploading()">
+
+        <!-- Indicateur de chargement -->
+        @if (isUploading()) {
+          <div class="d-flex align-items-center mt-2 text-primary">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            <strong>Upload en cours...</strong>
           </div>
         }
+
+        <!-- Aperçu de l'image uploadée -->
+        <div class="image-preview-container mt-3">
+          @if (imagePreview()) {
+            <img [src]="imagePreview()!"
+                 alt="Aperçu"
+                 class="img-fluid rounded border"
+                 style="max-height: 200px;">
+          } @else if (formation.image) {
+            <img [src]="formation.image"
+                 alt="Aperçu"
+                 class="img-fluid rounded border"
+                 style="max-height: 200px;">
+          }
+        </div>
       </div>
+
 
     </div>
   </div>

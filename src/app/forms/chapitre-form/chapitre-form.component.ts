@@ -12,15 +12,8 @@ import { Chapitre } from '../../interfaces/formation';
   styleUrl: './chapitre-form.component.css',
 })
 export class ChapitreFormComponent {
-  /**
-   * @Input pour recevoir l'objet Chapitre à éditer.
-   */
   @Input({ required: true }) chapitre!: Chapitre;
 
-  /**
-   * @Output pour émettre l'objet modifié vers le composant parent.
-   * Nommé 'chapitreChange' pour supporter le [(chapitre)] (liaison bidirectionnelle).
-   */
   @Output() chapitreChange = new EventEmitter<Chapitre>();
 
   /**

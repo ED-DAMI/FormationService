@@ -1,0 +1,75 @@
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #1a1a1a;
+  color: white;
+}
+
+/* Logo */
+.logo a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.nav-links li a.active {
+  border-bottom: 2px solid #4caf50;
+}
+
+/* Burger menu (mobile) */
+.burger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.burger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  margin: 4px;
+  transition: 0.3s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: #1a1a1a;
+    width: 200px;
+    height: 0;
+    overflow: hidden;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    transition: height 0.3s ease-in-out;
+  }
+
+  .nav-links.active {
+    height: 150px;
+    padding: 15px;
+  }
+
+  .burger {
+    display: flex;
+  }
+}

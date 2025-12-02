@@ -22,6 +22,7 @@ export interface Cours {
 
 export interface Formation {
   id?: number;
+  derniereMiseAJour:Date;
   titre: string;
   description?: string;
   niveau?: string;

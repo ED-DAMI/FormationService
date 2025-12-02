@@ -1,0 +1,40 @@
+<div class="container">
+  <h2>📚 Formations disponibles</h2>
+  <button class="create-btn" (click)="create()">+ Nouvelle Formation</button>
+
+  @if(loading) {
+    <p>Chargement...</p>
+  } @else {
+    <div class="cards">
+      @for(f of formations; track f.id!) {
+        <div class="card">
+          <img class="banner" [src]="f.image || 'icon.jpeg' " />
+          <!-- CORRECTION: Utilisation de {{ }} au lieu de @{ } -->
+          <h3>{{ f.titre }}</h3>
+          <!-- CORRECTION: Utilisation de {{ }} au lieu de @{ } -->
+          <p class="desc">{{ f.description || 'Pas de description.' }}</p>
+          <!-- CORRECTION: Utilisation de {{ }} au lieu de @{ } -->
+          <p class="meta">🕒 Dernière mise à jour : {{ f.derniereMiseAJour | date:'medium' }}</p>
+
+          <div class="actions">
+            <button class="edit-btn" (click)="edit(f.id!)">Modifier</button>
+            <button class="delete-btn" (click)="delete(f.id!)">Supprimer</button>
+            <button class="view-btn" (click)="viewFormation(f)">Visualiser</button>
+          </div>
+        </div>
+      } @empty {
+        <!-- Ce bloc remplace l'ancien @if(formations.length === 0) -->
+        <p>Aucune formation trouvée.</p>
+      }
+    </div>
+  }
+</div>
+
+@if(showFormationView) {
+  <div class="modal">
+    <button class="close-btn" (click)="showFormationView = false">✖</button>
+    <app-formation-view [formation]="selectedFormation">
+    </app-formation-view>
+
+  </div>
+}

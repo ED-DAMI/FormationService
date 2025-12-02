@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/">MyApp</a>
+  </div>
+
+  <ul class="nav-links" [class.active]="isMenuOpen">
+    <li><a routerLink="/formation-dashboard" routerLinkActive="active">Dashboard</a></li>
+    <li><a routerLink="/create_formation" routerLinkActive="active">Create formation</a></li>
+  </ul>
+
+  <div class="burger" (click)="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>

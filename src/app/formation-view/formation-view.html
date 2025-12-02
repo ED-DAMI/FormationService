@@ -1,0 +1,60 @@
+@if(formationComputed(); as f) {
+  <div class="formation-container">
+    <h2>{{ f.titre }}</h2>
+
+    @if(f.description) {
+      <p>{{ f.description }}</p>
+    }
+
+    <p><strong>Dernière mise à jour :</strong> {{ formatDate(f.derniereMiseAJour) }}</p>
+
+    @if(f.niveau) {
+      <p><strong>Niveau :</strong> {{ f.niveau }}</p>
+    }
+
+    @if(f.image) {
+      <img [src]="f.image" [alt]="f.titre" class="formation-image">
+    }
+
+    @for(cours of f.cours ?? []; track cours.id) {
+      <div class="cours-container">
+        <h3>{{ cours.titre }}</h3>
+
+        @if(cours.resume) {
+          <p>{{ cours.resume }}</p>
+        }
+
+        @for(chapitre of cours.chapitres ?? []; track chapitre.id) {
+          <div class="chapitre-container">
+            <h4 (click)="toggleChapter(chapitre)" style="cursor:pointer">
+              {{ chapitre.titre }} <span>{{ isChapterOpen(chapitre) ? '[-]' : '[+]' }}</span>
+            </h4>
+
+            @if(isChapterOpen(chapitre)) {
+              @for(section of chapitre.sections ?? []; track section.id) {
+                <div class="section-item">
+                  <strong>{{ section.typeContenu }}:</strong>
+                  @if(section.typeContenu === 'TEXTE') {
+                    {{ section.contenu }}
+                  }
+                  @if(section.typeContenu === 'VIDEO') {
+                    <video width="320" height="240" controls>
+                      <source [src]="section.contenu" type="video/mp4">
+                    </video>
+                  }
+                  @if(section.typeContenu === 'IMAGE') {
+                    <img [src]="'img.png' " alt="Image section" class="section-image">
+                  }
+                </div>
+              }
+            }
+          </div>
+        } @empty {
+          <p>Aucun chapitre trouvé pour ce cours.</p>
+        }
+      </div>
+    } @empty {
+      <p>Aucun cours trouvé pour cette formation.</p>
+    }
+  </div>
+}

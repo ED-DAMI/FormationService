@@ -1,72 +1,52 @@
-<!-- src/app/forms/section-form/section-form.component.html -->
-
-<div class="card shadow-sm border-0">
-  <div class="card-header bg-white border-bottom p-3">
-    <h5 class="mb-0 text-secondary">
-      <i class="bi bi-file-text me-2"></i>
-      Édition du Contenu de la Section
-    </h5>
+<div class="card shadow-sm">
+  <div class="card-header bg-light">
+    <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>Édition de la Section</h5>
   </div>
   <div class="card-body p-4">
-
-    <!-- Champ : Titre de la Section -->
-    <div class="mb-4">
-      <label for="sectionTitre" class="form-label fw-bold">Titre de la Section :</label>
-      <input type="text" id="sectionTitre" class="form-control form-control-lg"
-             [(ngModel)]="section.titre"
-             (ngModelChange)="onModelChange()"
-             name="sectionTitre"
-             placeholder="Ex: Introduction au concept de Signal">
-    </div>
-
-    <!-- Sélecteur de Type de Contenu (UX moderne) -->
-    <div class="mb-4">
-      <label class="form-label fw-bold d-block">Type de Contenu :</label>
-      <div class="btn-group btn-group-sm" role="group">
-
-        <input type="radio" class="btn-check" id="typeTexte" value="TEXTE"
-               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
-        <label class="btn btn-outline-secondary" for="typeTexte"><i class="bi bi-textarea me-2"></i> Texte (Éditeur Riche)</label>
-
-        <input type="radio" class="btn-check" id="typeVideo" value="VIDEO"
-               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
-        <label class="btn btn-outline-secondary" for="typeVideo"><i class="bi bi-camera-video me-2"></i> Vidéo (URL)</label>
-
-        <input type="radio" class="btn-check" id="typeImage" value="IMAGE"
-               [(ngModel)]="section.typeContenu" (ngModelChange)="onModelChange()" name="typeContenu">
-        <label class="btn btn-outline-secondary" for="typeImage"><i class="bi bi-image me-2"></i> Image (URL)</label>
-      </div>
-    </div>
-
-    <!-- Zone de Contenu Conditionnelle -->
-    <div class="mb-3">
-      <label for="sectionContenu" class="form-label fw-bold">
-        Contenu ({{ section.typeContenu }}) :
-      </label>
+    <div class="row g-4">
+      <!-- ... (champs titre et type de contenu) ... -->
+      <div class="col-12"><label for="sectionTitre" class="form-label fw-bold">Titre :</label><input type="text" id="sectionTitre" class="form-control" [(ngModel)]="section.titre" name="sectionTitre"></div>
+      <div class="col-12"><label for="typeContenu" class="form-label fw-bold">Type de Contenu :</label><select id="typeContenu" class="form-select" [(ngModel)]="section.typeContenu" name="typeContenu" (change)="onTypeContenuChange()"><option *ngFor="let type of typeContenuOptions" [value]="type">{{ type }}</option></select></div>
 
       @if (section.typeContenu === 'TEXTE') {
-        <!-- ZONE CRUCIALE : PLACEHOLDER DE L'ÉDITEUR RICHE WYSIWYG -->
-        <textarea id="sectionContenu" class="form-control editor-rich-placeholder" rows="10"
-                  placeholder="Intégrez ici votre composant d'éditeur riche (Quill, Tiptap, CKEditor) pour le formatage du texte."
-                  [(ngModel)]="section.contenu"
-                  (ngModelChange)="onModelChange()"
-                  name="sectionContenu"></textarea>
-      } @else {
-        <!-- Champ URL pour Vidéo ou Image -->
-        <input type="url" id="sectionContenu" class="form-control form-control-lg"
-               placeholder="Collez l'URL de votre {{ section.typeContenu === 'VIDEO' ? 'vidéo YouTube/Vimeo' : 'image' }} ici."
-               [(ngModel)]="section.contenu"
-               (ngModelChange)="onModelChange()"
-               name="sectionContenu">
+        <div class="col-12">
+          <label for="contenuTexte" class="form-label fw-bold">Contenu Texte :</label>
+          <textarea id="contenuTexte" class="form-control" [(ngModel)]="section.contenu" name="contenuTexte" rows="8"></textarea>
+        </div>
       }
 
-      <!-- UX: Prévisualisation de l'URL pour les médias -->
-      @if (section.typeContenu !== 'TEXTE' && section.contenu) {
-        <div class="mt-3 p-3 bg-light rounded text-break">
-          <small class="text-muted">URL source : {{ section.contenu }}</small>
+      @if (section.typeContenu === 'IMAGE' || section.typeContenu === 'VIDEO') {
+        <div class="col-12">
+          <label class="form-label fw-bold">{{ section.typeContenu === 'IMAGE' ? 'Fichier Image' : 'Fichier Vidéo' }}</label>
+
+          <input type="file" class="form-control" (change)="onFileSelected($event)" [attr.accept]="section.typeContenu === 'IMAGE' ? 'image/*' : 'video/*'" [disabled]="isUploading()">
+
+          @if (isUploading()) {
+            <div class="d-flex align-items-center mt-2 text-primary">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <strong>Téléversement en cours...</strong>
+            </div>
+          } @else {
+            <div class="form-text">Uploadez un nouveau fichier pour remplacer l'actuel.</div>
+          }
+
+          <div class="preview-container mt-3">
+            @if (filePreview()) {
+              <div class="file-preview border rounded p-2 text-center d-inline-block">
+                @if (section.typeContenu === 'IMAGE') {
+                  <img [src]="filePreview()!" alt="Aperçu" class="img-fluid rounded" style="max-height: 200px;">
+                } @else if (section.typeContenu === 'VIDEO') {
+                  <video [src]="filePreview()!" controls class="img-fluid rounded" style="max-height: 200px;"></video>
+                }
+              </div>
+            } @else if(section.contenu) {
+              <div class="file-preview border rounded p-2 text-center d-inline-block bg-light">
+                <div class="text-muted p-3"><i class="bi bi-paperclip me-2"></i>{{ section.contenu }}</div>
+              </div>
+            }
+          </div>
         </div>
       }
     </div>
-
   </div>
 </div>

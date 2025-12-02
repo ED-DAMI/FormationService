@@ -1,62 +1,44 @@
-/* src/app/structure-explorer/structure-explorer.component.css */
-
-.explorer-item {
-  display: flex;
-  align-items: center;
-  padding: 6px 8px;
-  margin-bottom: 2px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s, color 0.15s;
-  position: relative;
-}
-
-/* Effet de survol */
-.explorer-item:hover {
-  background-color: #e9ecef; /* bg-light (Hover gris subtil) */
-}
-
-/* Style de l'élément sélectionné */
-.selected-item {
-  background-color: #cce5ff; /* bg-primary-subtle (Bleu clair pour la sélection) */
-  color: #004085 !important; /* Texte bleu foncé */
-  font-weight: 500;
-}
-
-/* Cache les actions par défaut */
+/* Afficher toujours les actions de manière plus visible */
 .item-actions {
   display: none;
   margin-left: auto;
-  gap: 5px;
-  z-index: 10;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
-/* Affiche les actions au survol du parent */
-.explorer-item:hover .item-actions {
+/* Afficher les boutons au hover ou quand l’item est actif */
+.tree-item:hover .item-actions,
+.tree-item.active .item-actions {
   display: flex;
 }
 
-/* Style des boutons d'action */
+/* Style des boutons d'actions */
 .item-actions button {
-  border: none;
-  background: none;
-  padding: 0 4px;
-  color: #6c757d; /* Gris pour les icônes d'action */
-  font-size: 0.9rem;
-  transition: color 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  width: 28px;
+  border-radius: 6px;
+  border: 1px solid #d6d6d6;
+  background-color: #ffffff;
+  transition: background-color 0.15s, transform 0.1s;
+  padding: 0;
 }
 
+/* Icônes plus visibles */
+.item-actions button i {
+  font-size: 16px;
+  color: #495057;
+}
+
+/* Effet hover pour bien attirer l'œil */
 .item-actions button:hover {
-  color: #0d6efd; /* Bleu pour l'interactivité */
+  background-color: #e8f0ff;
+  border-color: #0d6efd;
+  transform: scale(1.08);
 }
 
-/* Styles pour les lignes d'arborescence (indentation) */
-
-.border-start {
-  border-left: 1px solid #dee2e6 !important; /* Ligne Bootstrap par défaut */
+.item-actions button.text-danger i {
+  color: #dc3545 !important;
 }
-
-.ms-2 { margin-left: 0.5rem !important; }
-.ms-3 { margin-left: 1rem !important; }
-.ps-2 { padding-left: 0.5rem !important; }
-.ps-3 { padding-left: 1rem !important; }

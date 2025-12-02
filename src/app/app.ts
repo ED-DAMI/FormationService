@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {StructureExplorerComponent} from './structure-explorer/structure-explorer.component';
-import {FormationEditorComponent} from './formation-editor-component/formation-editor.component';
+import {FormationEditorComponent} from './components/formation-editor-component/formation-editor.component';
+import {Navbar} from './fragments/navbar/navbar';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone:true,
-  imports: [RouterOutlet,FormationEditorComponent],
+  imports: [Navbar, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
